@@ -6,7 +6,7 @@ $Users = TableRegistry::getTableLocator()->get('Users');
 $Administrators = TableRegistry::getTableLocator()->get('Administrators');
 
 $id = Router::getRequest()->getSession()->read('Users.id_user');
-$user = $Users->get($id, ['contain'=>['Credentials']]);
+$user = $Users->get($id, contain: ['Credentials']);
 $administrator = $Administrators->find('all')->where(['user_id'=>$id])->toArray();
 ?>
 

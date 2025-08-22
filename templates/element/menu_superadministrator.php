@@ -5,7 +5,7 @@ use Cake\ORM\TableRegistry;
 $Users = TableRegistry::getTableLocator()->get('Users');
 
 $id = Router::getRequest()->getSession()->read('Users.id_user');
-$user = $Users->get($id, ['contain'=>['Credentials']]);
+$user = $Users->get($id, contain: ['Credentials']);
 ?>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">

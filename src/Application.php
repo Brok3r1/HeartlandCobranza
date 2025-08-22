@@ -96,8 +96,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ]))*/
             ->add(new AuthenticationMiddleware($this));
 
-        $csrf = new CsrfProtectionMiddleware();
-        $csrf-> httponly = true;
+        $csrf = new CsrfProtectionMiddleware(['httponly' => true,]);
         $csrf->skipCheckCallback(function ($request) {
             if (strpos($request->getRequestTarget(), '/api/') === 0) {
                 return true;
@@ -106,6 +105,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 return false;
             }
         });
+
         $middlewareQueue->add($csrf);
 
         return $middlewareQueue;
@@ -127,13 +127,15 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $authenticationService = new AuthenticationService([
             'unauthenticatedRedirect' => Router::url('/users/login'),
             'queryParam' => 'redirect',
-        ]);
-
-        // Load identifiers, ensure we check email and password fields
-        $authenticationService->loadIdentifier('Authentication.Password', [
-            'fields' => [
-                'username' => 'username',
-                'password' => 'password',
+            'authenticators' => [
+                'Authentication.Form' => [
+                    'identifier' => 'Authentication.Password', [
+                        'fields' => [
+                            'username' => 'username',
+                            'password' => 'password',
+                        ],
+                    ],
+                ],
             ],
         ]);
 
@@ -145,7 +147,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'username' => 'username',
                 'password' => 'password',
             ],
-           // 'loginUrl' => Router::url('/users/login'),
         ]);
 
         return $authenticationService;

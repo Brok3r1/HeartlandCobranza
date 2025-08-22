@@ -105,7 +105,7 @@ class AdministratorsController extends AppController
 
     public function addusr(){
         $this->autoRender = false;
-        $this->Users = $this->fetchTable('Users');
+        $Users = $this->fetchTable('Users');
         
         if ($this->request->is('post')) {
             //debug($this->request->getData());
@@ -113,7 +113,7 @@ class AdministratorsController extends AppController
             $email =  $this->request->getData('email');
 
             $administrators = $this->Administrators->find('all')->where(['email' => $email])->toArray();
-            $users = $this->Users->find('all')->where(['username' => $email])->toArray();
+            $users = $Users->find('all')->where(['username' => $email])->toArray();
 
             if(empty($administrators) && empty($users)){
                
@@ -127,13 +127,13 @@ class AdministratorsController extends AppController
                 $letter4 = chr(64+rand(0,26));
                 $pwd = $letter.$num.$letter2.$num2.$letter3.$num3.$letter4.$num4;
 
-                $user = $this->Users->newEmptyEntity();
+                $user = $Users->newEmptyEntity();
                 $user->credential_id = $this->request->getData('credential_id');
                 $user->username = $this->request->getData('email');
                 $user->password = $pwd;
                 $user->status = 1;
                 $user->status_recover = 0;
-                $save = $this->Users->save($user);
+                $save = $Users->save($user);
 
                 $administrator = $this->Administrators->newEmptyEntity();
                 $administrator->user_id = $save->id_user;
@@ -203,7 +203,7 @@ class AdministratorsController extends AppController
 
     public function editusr(){
         $this->autoRender = false;
-        $this->Users = $this->fetchTable('Users');
+        $Users = $this->fetchTable('Users');
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             //debug($this->request->getData());
@@ -217,10 +217,10 @@ class AdministratorsController extends AppController
             $administrator->status = $this->request->getData('status_e');
             $save2 = $this->Administrators->save($administrator);
 
-            $user = $this->Users->get($administrator->user_id);
+            $user = $Users->get($administrator->user_id);
             $user->username = $this->request->getData('email_e');
             $user->status = $this->request->getData('status_e');
-            $save = $this->Users->save($user);
+            $save = $Users->save($user);
 
             if ($save2 && $save) {
                 $this->Flash->success(__('Se modifico el usuario correctamente.'));
@@ -235,7 +235,7 @@ class AdministratorsController extends AppController
 
     public function recoverypass($id=null){
         $this->autoRender=false;
-        $this->Users = $this->fetchTable('Users');
+        $Users = $this->fetchTable('Users');
         
         $num = rand(0,9);
         $num2 = rand(0,9);
@@ -247,9 +247,9 @@ class AdministratorsController extends AppController
         $letter4 = chr(64+rand(0,26));
         $pwd = $letter.$num.$letter2.$num2.$letter3.$num3.$letter4.$num4;
         
-        $user = $this->Users->get($id);
+        $user = $Users->get($id);
         $user->password = $pwd;
-        $salvado = $this->Users->save($user);
+        $salvado = $Users->save($user);
         
         $correo = $user->username;
         $administrators = $this->Administrators->find("all")->where(["user_id"=>$id])->toArray();

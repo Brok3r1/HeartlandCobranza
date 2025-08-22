@@ -159,7 +159,7 @@ class UsersController extends AppController
     }
 
     public function login(){
-        $this->Credentials = $this->fetchTable('Credentials');
+        $Credentials = $this->fetchTable('Credentials');
 
         $session = Router::getRequest()->getSession();
 
@@ -182,7 +182,7 @@ class UsersController extends AppController
 
                 // Verificar el estatus del usuario
                 if ($status == 1) {
-                    $credential = $this->Credentials->get($credential_id);
+                    $credential = $Credentials->get($credential_id);
                     return $this->redirect(['action' => $credential->home]);
                 } 
                 else {
@@ -216,8 +216,8 @@ class UsersController extends AppController
 
     public function recovery(){
         $this->autoRender = false;
-        $this->SuperAdministrators = $this->fetchTable('SuperAdministrators');
-        $this->Administrators = $this->fetchTable('Administrators');
+        $SuperAdministrators = $this->fetchTable('SuperAdministrators');
+        $Administrators = $this->fetchTable('Administrators');
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             //debug($this->request->getData());
@@ -236,8 +236,8 @@ class UsersController extends AppController
             $letter4 = chr(64 + rand(0, 26));
             $pwd = $letter . $num . $letter2 . $num2 . $letter3 . $num3 . $letter4 . $num4;
 
-            $superAdministrators = $this->SuperAdministrators->find('all')->where(['email'=>$email_recover])->toArray();
-            $administrators = $this->Administrators->find('all')->where(['email'=>$email_recover])->toArray();
+            $superAdministrators = $SuperAdministrators->find('all')->where(['email'=>$email_recover])->toArray();
+            $administrators = $Administrators->find('all')->where(['email'=>$email_recover])->toArray();
             
             foreach ($superAdministrators as $key) {
                 $user_id = $key->user_id;
@@ -287,34 +287,34 @@ class UsersController extends AppController
     }
 
     public function home(){
-        $this->Credentials = $this->fetchTable('Credentials');
+        $Credentials = $this->fetchTable('Credentials');
 
         $id = Router::getRequest()->getSession()->read('Users.credential_id');
         
         if ($id == 1 || $id == 2) {
-            $credential = $this->Credentials->get($id);
+            $credential = $Credentials->get($id);
             return $this->redirect(['action' => $credential->home]);
         }
     }
 
     public function homesuperadmin(){
-        $this->Credentials = $this->fetchTable('Credentials');
+        $Credentials = $this->fetchTable('Credentials');
 
         $id = Router::getRequest()->getSession()->read('Users.credential_id');
         
         if ($id != 1) {
-            $credential = $this->Credentials->get($id);
+            $credential = $Credentials->get($id);
             return $this->redirect(['action' => $credential->home]);
         }
     }
 
     public function homeadmin(){
-        $this->Credentials = $this->fetchTable('Credentials');
+        $Credentials = $this->fetchTable('Credentials');
 
         $id = Router::getRequest()->getSession()->read('Users.credential_id');
         
         if ($id != 2) {
-            $credential = $this->Credentials->get($id);
+            $credential = $Credentials->get($id);
             return $this->redirect(['action' => $credential->home]);
         }
     }
