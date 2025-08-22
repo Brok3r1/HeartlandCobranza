@@ -247,7 +247,7 @@ class AdministratorsController extends AppController
         $letter4 = chr(64+rand(0,26));
         $pwd = $letter.$num.$letter2.$num2.$letter3.$num3.$letter4.$num4;
         
-        $user = $this->Users->get($id, ['contain' => ['Credentials']]);
+        $user = $this->Users->get($id);
         $user->password = $pwd;
         $salvado = $this->Users->save($user);
         

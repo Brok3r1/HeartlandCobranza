@@ -249,7 +249,7 @@ class UsersController extends AppController
             }
 
             if ($user_id > 0) {
-                $user = $this->Users->get($user_id, ['contain' => ['Credentials']]);
+                $user = $this->Users->get($user_id);
                 $user->password = $pwd;
                 $salvado = $this->Users->save($user);
 
